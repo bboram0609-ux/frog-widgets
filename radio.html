@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개구리 라디오</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
+<style>
+:root{--bg:#F6F8F3;--body:#2F6B45;--body2:#285C3B;--screen:#E9F0DC;--screenInk:#24402C;--tick:#7E9A80;--needle:#C4554D;--btn:#F6F8F3;--btnInk:#24402C;--grill:#1F4A2E;--font:'Jua',system-ui,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1F2420;--body:#2C5E3F;--body2:#244E34;--screen:#1B2A20;--screenInk:#CFE6CF;--tick:#5F7D63;--needle:#EE8A80;--btn:#E4EDE0;--btnInk:#1B2A20;--grill:#173A24;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1F2420;--body:#2C5E3F;--body2:#244E34;--screen:#1B2A20;--screenInk:#CFE6CF;--tick:#5F7D63;--needle:#EE8A80;--btn:#E4EDE0;--btnInk:#1B2A20;--grill:#173A24;color-scheme:dark}
+html,body{margin:0;height:100%}
+body{background:var(--bg);font-family:var(--font);display:flex;align-items:center;justify-content:center;padding:8px 10px;box-sizing:border-box;overflow:hidden}
+.radio{position:relative;width:100%;max-width:340px;height:100%;max-height:200px;background:linear-gradient(var(--body),var(--body2));border-radius:18px;padding:10px 12px;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.15)}
+.radio::before{content:"";position:absolute;top:-6px;right:28px;width:4px;height:14px;background:var(--body2);border-radius:2px;transform:rotate(18deg)}
+.screen{flex:1 1 auto;min-height:0;background:var(--screen);border-radius:10px;padding:6px 10px;display:flex;align-items:center;gap:8px;position:relative;overflow:hidden}
+.screen img{height:100%;max-height:70px;width:auto;flex:none}
+.info{min-width:0;flex:1}
+.fm{font-size:11px;color:var(--tick);letter-spacing:1px}
+.st{font-size:clamp(15px,7vw,20px);color:var(--screenInk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{font-size:11px;color:var(--tick);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dial{position:relative;height:10px;margin-top:4px;background:repeating-linear-gradient(90deg,var(--tick) 0 1px,transparent 1px 8px);opacity:.8}
+.needle{position:absolute;top:-2px;width:2px;height:14px;background:var(--needle);transition:left .4s}
+.ctrl{display:flex;align-items:center;gap:6px}
+button{flex:none;width:40px;height:40px;border:0;border-radius:50%;background:var(--btn);color:var(--btnInk);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+button.play{width:46px;height:46px}
+button:focus-visible{outline:2px solid var(--screen);outline-offset:2px}
+button svg{width:16px;height:16px}
+.eq{flex:1;display:flex;align-items:flex-end;justify-content:flex-end;gap:3px;height:26px;min-width:0}
+.eq i{display:block;width:4px;height:6px;background:var(--grill);border-radius:2px;opacity:.8}
+.on .eq i{background:var(--screen);animation:b 0.9s ease-in-out infinite}
+.on .eq i:nth-child(2){animation-delay:.15s}.on .eq i:nth-child(3){animation-delay:.3s}.on .eq i:nth-child(4){animation-delay:.45s}.on .eq i:nth-child(5){animation-delay:.6s}.on .eq i:nth-child(6){animation-delay:.2s}
+@keyframes b{0%,100%{height:6px}50%{height:24px}}
+@media (prefers-reduced-motion:reduce){.on .eq i{animation:none;height:16px}}
+@media (max-width:210px){.screen img{display:none}.eq{display:none}}
+</style>
+</head>
+<body>
+<div class="radio" id="radio">
+  <div class="screen">
+    <img id="frog" src="frogs/sleepy.png" alt="">
+    <div class="info">
+      <div class="fm" id="fm">FM 1</div>
+      <div class="st" id="st">재즈</div>
+      <div class="sub" id="sub">눌러서 켜기</div>
+      <div class="dial"><div class="needle" id="needle"></div></div>
+    </div>
+  </div>
+  <div class="ctrl">
+    <button type="button" id="prev" aria-label="이전 채널"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"></path></svg></button>
+    <button type="button" class="play" id="play" aria-label="켜기"><svg id="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"></path></svg></button>
+    <button type="button" id="next" aria-label="다음 채널"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"></path></svg></button>
+    <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+</div>
+<script>
+// 인터넷 라디오 SomaFM (청취자 후원으로 운영되는 무료 방송)
+var st=[
+  {name:'재즈',desc:'Sonic Universe · SomaFM',url:'https://ice.somafm.com/sonicuniverse',frog:'dj'},
+  {name:'로파이',desc:'Fluid · SomaFM',url:'https://ice.somafm.com/fluid',frog:'hp_calm'},
+  {name:'칠 라운지',desc:'Groove Salad · SomaFM',url:'https://ice.somafm.com/groovesalad',frog:'melon'},
+  {name:'스파이 재즈',desc:'Secret Agent · SomaFM',url:'https://ice.somafm.com/secretagent',frog:'hp_star'}
+];
+var i=0;try{var s=+localStorage.getItem('frog-radio-st');if(s>=0&&s<st.length)i=s;}catch(e){}
+var a=new Audio();a.preload='none';var on=false;
+var $=function(x){return document.getElementById(x)};
+var PLAY='<path d="M7 4v16l13-8z"></path>',PAUSE='<path d="M6 4h4v16H6zM14 4h4v16h-4z"></path>';
+function show(msg){
+  $('fm').textContent='FM '+(i+1);$('st').textContent=st[i].name;$('sub').textContent=msg||st[i].desc;
+  $('needle').style.left=(8+i*(84/(st.length-1)))+'%';
+  $('frog').src='frogs/'+(on?st[i].frog:'sleepy')+'.png';
+  $('radio').classList.toggle('on',on);
+  $('ic').innerHTML=on?PAUSE:PLAY;$('play').setAttribute('aria-label',on?'끄기':'켜기');
+}
+function start(){a.src=st[i].url;on=true;show('연결 중…');var p=a.play();if(p&&p.catch)p.catch(function(){on=false;show('다시 눌러 주세요');});}
+function stop(){a.pause();a.removeAttribute('src');a.load();on=false;show();}
+a.addEventListener('playing',function(){show();});
+a.addEventListener('error',function(){if(on){on=false;show('연결이 안 돼요. 다른 채널을 눌러 보세요');}});
+$('play').onclick=function(){on?stop():start();};
+function go(d){i=(i+d+st.length)%st.length;try{localStorage.setItem('frog-radio-st',i)}catch(e){}if(on)start();else show();}
+$('prev').onclick=function(){go(-1)};$('next').onclick=function(){go(1)};
+show();
+</script>
+</body>
+</html>

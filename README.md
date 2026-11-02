@@ -14,3 +14,4 @@
 - 위젯 묶음: panel.html?w=clock.html&w=progress.html (한 칸에 여러 위젯을 위아래로)
 
 - 개구리 라디오: music.html (?yt=유튜브주소 로 내 음악 추가)
+- 개구리 라디오(소리만): radio.html — SomaFM 인터넷 라디오
