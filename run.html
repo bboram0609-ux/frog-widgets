@@ -25,6 +25,7 @@ button.on{border:2px solid var(--stamp);background:var(--stamp);color:var(--bg)}
 button.on img{position:absolute;inset:8%;width:84%;height:84%;object-fit:contain}
 button.race{border-style:solid;border-color:var(--green);color:var(--green)}
 button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.nx{font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
 .msg{font-size:12px;text-align:center;color:var(--green);min-height:1em}
 </style>
 </head>
@@ -41,14 +42,15 @@ button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
   <div class="lab"><span>훈련 도장</span><span id="cnt">0 / 6</span></div>
   <div class="st" id="st"></div>
 </div>
+<div class="nx" id="next"></div>
 <div class="msg" id="msg"></div>
 <script>
 // 훈련한 날 동그라미를 누르면 개구리 도장이 찍혀요 (이 기기에만 저장돼요)
 var race=new Date(2026,10,14);
-var days=[[3,'화'],[5,'목'],[7,'토'],[8,'일'],[10,'화'],[12,'목'],[14,'대회']];
+var days=[[3,'화','쉬운 달리기 20분'],[5,'목','인터벌 3분+2분×5'],[7,'토','쉬운 달리기 25분'],[8,'일','연습 4km'],[10,'화','인터벌 1분+2분×6'],[12,'목','쉬운 달리기 15분'],[14,'대회','통큰런 5K 08:00']];
 var KEY='frog-run-tongkeun';var done={};try{done=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){}
 var cheer=['좋아, 첫 도장!','두 번째! 몸이 기억해','벌써 절반!','네 번째, 멋져','거의 다 왔어','훈련 끝! 이제 푹 쉬자','완주 축하해!'];
-var $=function(x){return document.getElementById(x)};
+var $=function(x){return document.getElementById(x)};function x2(n){return n}
 function render(){
   var t=new Date();t.setHours(0,0,0,0);var d=Math.round((race-t)/86400000);
   $('n').textContent=d>0?'D-'+d:d===0?'D-DAY':'완주!';
@@ -57,14 +59,16 @@ function render(){
     var b=document.createElement('button');b.type='button';var k='11-'+x[0];var on=!!done[k];
     var isRace=x[1]==='대회';if(on&&!isRace)c++;
     b.className=(on?'on ':'')+(isRace?'race ':'')+(t.getMonth()===10&&t.getDate()===x[0]?'today':'');
-    b.setAttribute('aria-label','11월 '+x[0]+'일 '+(on?'도장 찍음':'도장 찍기'));
+    b.setAttribute('aria-label','11월 '+x[0]+'일 '+x[2]+' '+(on?'도장 찍음':'도장 찍기'));
     if(on){var im=document.createElement('img');im.alt='';im.src='frogs/'+(isRace?'rockstar':'clover_frog')+'.png';b.appendChild(im);}
-    else b.textContent=isRace?'14':x[0];
+    else b.textContent=isRace?'완주':(days.indexOf(x)+1);
     b.onclick=function(){if(done[k])delete done[k];else done[k]=1;try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}
       var n=Object.keys(done).filter(function(z){return z!=='11-14'}).length;$('msg').textContent=done[k]?(k==='11-14'?cheer[6]:cheer[Math.max(0,n-1)]):'';render();};
     box.appendChild(b);
   });
   $('cnt').textContent=c+' / 6';
+  var nx=days.filter(function(x){return !done['11-'+x[0]]&&new Date(2026,10,x[0])>=t})[0];
+  $('next').textContent=nx?('다음: 11/'+x2(nx[0])+'('+(nx[1]==='대회'?'토':nx[1])+') '+nx[2]):'모든 도장 완료!';
   $('frog').src='frogs/'+(done['11-14']?'rockstar':d<=1?'sleepy':c>=4?'angel':c>=1?'clover_frog':'baseball')+'.png';
 }
 render();setInterval(render,60000);
