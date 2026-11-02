@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개구리 위젯 묶음</title>
+<style>
+:root{--bg:#FFFFFF;--gap:8px;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#191C1A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#191C1A;color-scheme:dark}
+html,body{margin:0;height:100%}
+body{background:var(--bg);display:flex;flex-direction:column;gap:var(--gap);box-sizing:border-box;overflow:hidden}
+iframe{flex:1 1 0;min-height:0;width:100%;border:0;border-radius:6px;display:block}
+</style>
+</head>
+<body>
+<script>
+// 주소 뒤에 ?w=clock.html&w=progress.html 처럼 위젯을 여러 개 붙이면 위아래로 나눠서 보여줘요
+var q=new URLSearchParams(location.search);
+var list=q.getAll('w');if(!list.length)list=['clock.html','progress.html'];
+list.forEach(function(src){
+  if(!/^[a-z]+\.html(\?.*)?$/.test(src))return;
+  var f=document.createElement('iframe');f.src=src;f.title=src.split('.')[0];f.loading='eager';
+  document.body.appendChild(f);
+});
+</script>
+</body>
+</html>

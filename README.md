@@ -10,3 +10,5 @@
 - 이번 달 목표: goals.html?goals=지원서 제출:2/5,릴스 업로드:1/8
 
 주소: https://bboram0609-ux.github.io/frog-widgets/
+
+- 위젯 묶음: panel.html?w=clock.html&w=progress.html (한 칸에 여러 위젯을 위아래로)
