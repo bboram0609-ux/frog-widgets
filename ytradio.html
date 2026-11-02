@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개구리 라디오</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
+<style>
+:root{--bg:#F6F8F3;--body:#2F6B45;--body2:#285C3B;--label:#E9F0DC;--btn:#F6F8F3;--btnInk:#24402C;--on:#F2C76B;--font:'Jua',system-ui,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1F2420;--body:#2C5E3F;--body2:#244E34;--label:#CFE6CF;--btn:#E4EDE0;--btnInk:#1B2A20;--on:#F2C76B;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1F2420;--body:#2C5E3F;--body2:#244E34;--label:#CFE6CF;--btn:#E4EDE0;--btnInk:#1B2A20;--on:#F2C76B;color-scheme:dark}
+html,body{margin:0;height:100%}
+body{background:var(--bg);font-family:var(--font);padding:8px 10px;box-sizing:border-box;overflow:hidden;display:flex}
+.radio{position:relative;flex:1;min-width:0;background:linear-gradient(var(--body),var(--body2));border-radius:16px;padding:10px;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.15)}
+.radio::before{content:"";position:absolute;top:-6px;right:26px;width:4px;height:14px;background:var(--body2);border-radius:2px;transform:rotate(18deg)}
+.head{display:flex;align-items:center;gap:6px;color:var(--label);font-size:14px}
+.head img{height:30px;width:auto}
+.screen{flex:1 1 auto;min-height:90px;border-radius:8px;overflow:hidden;background:#111;border:3px solid var(--body2)}
+iframe{width:100%;height:100%;border:0;display:block}
+.ch{display:flex;gap:5px}
+button{flex:1 1 0;min-width:0;min-height:36px;padding:0 4px;border:0;border-radius:999px;background:var(--btn);color:var(--btnInk);font-family:var(--font);font-size:13px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+button[aria-pressed="true"]{background:var(--on)}
+button:focus-visible{outline:2px solid var(--on);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="radio">
+  <div class="head"><img id="frog" src="frogs/dj.png" alt="">개구리 라디오</div>
+  <div class="screen"><iframe id="yt" title="유튜브 음악" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+  <div class="ch" id="ch"></div>
+</div>
+<script>
+// 주소 뒤에 ?yt=유튜브주소 를 붙이면 '내 음악' 채널이 생겨요
+var st=[
+  {name:'카페 재즈',src:'https://www.youtube.com/embed/videoseries?list=PLqqys8u8qqZ7_b4_-6OkK-7rlFrbmAU_R&playsinline=1&rel=0',frog:'dj'},
+  {name:'모닝 재즈',src:'https://www.youtube.com/embed/e6KzjUOfmBk?playsinline=1&rel=0',frog:'melon'},
+  {name:'로파이',src:'https://www.youtube.com/embed/jfKfPfyJRdk?playsinline=1&rel=0',frog:'hp_calm'}
+];
+function toEmbed(u){
+  try{var x=new URL(u);var list=x.searchParams.get('list');var id=x.hostname.indexOf('youtu.be')>-1?x.pathname.slice(1):x.searchParams.get('v');
+    if(!id&&/^\/(live|shorts)\//.test(x.pathname))id=x.pathname.split('/')[2];
+    if(id)return 'https://www.youtube.com/embed/'+id+'?playsinline=1&rel=0'+(list?'&list='+list:'');
+    if(list)return 'https://www.youtube.com/embed/videoseries?list='+list+'&playsinline=1&rel=0';}catch(e){}
+  return null;
+}
+var mine=new URLSearchParams(location.search).get('yt');
+if(mine&&toEmbed(mine))st.push({name:'내 음악',src:toEmbed(mine),frog:'rockstar'});
+var i=0;try{var s=+localStorage.getItem('frog-yt');if(s>=0&&s<st.length)i=s;}catch(e){}
+var ch=document.getElementById('ch'),yt=document.getElementById('yt'),btns=[];
+function pick(n){i=n;yt.src=st[n].src;document.getElementById('frog').src='frogs/'+st[n].frog+'.png';
+  btns.forEach(function(b,j){b.setAttribute('aria-pressed',j===n?'true':'false')});try{localStorage.setItem('frog-yt',n)}catch(e){}}
+st.forEach(function(x,n){var b=document.createElement('button');b.type='button';b.textContent=x.name;b.onclick=function(){pick(n)};ch.appendChild(b);btns.push(b)});
+pick(i);
+</script>
+</body>
+</html>

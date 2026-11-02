@@ -22,6 +22,7 @@ var list=q.getAll('w');if(!list.length)list=['clock.html','progress.html'];
 var fl=(q.get('f')||'').split(',').map(Number);
 list.forEach(function(src,n){
   if(!/^[a-z]+\.html(\?.*)?$/.test(src))return;
+  var v=q.get('v');if(v)src+=(src.indexOf('?')>-1?'&':'?')+'v='+encodeURIComponent(v);
   var f=document.createElement('iframe');f.src=src;f.title=src.split('.')[0];f.loading='eager';
   if(fl[n]>0)f.style.flex=fl[n]+' 1 0';
   f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');f.setAttribute('allowfullscreen','');
