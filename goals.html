@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개구리 이번 달 목표</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
+<style>
+:root{--bg:#FFFFFF;--paper:#F7F6F2;--ink:#37352F;--sub:#6B6F68;--edge:#E9E7E0;--dash:#B7B5AE;--green:#2F6B45;--font:'Jua',system-ui,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#191C1A;--paper:#24282A;--ink:#ECEFE8;--sub:#A9B3A2;--edge:#383E3A;--dash:#59605A;--green:#8CC9A0;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#191C1A;--paper:#24282A;--ink:#ECEFE8;--sub:#A9B3A2;--edge:#383E3A;--dash:#59605A;--green:#8CC9A0;color-scheme:dark}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);display:flex;justify-content:center;align-items:flex-start;padding:8px 12px;box-sizing:border-box;overflow:hidden}
+.r{width:100%;max-width:280px;background:var(--paper);border:1px solid var(--edge);padding:16px 18px 14px;box-sizing:border-box;position:relative}
+.r::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:6px;background:radial-gradient(circle at 5px 0,transparent 4px,var(--paper) 4.5px) 0 0/10px 6px repeat-x}
+.m{text-align:center;font-size:26px;letter-spacing:3px}
+.s{text-align:center;color:var(--sub);font-size:13px;margin-top:2px}
+.hr{border-top:1px dashed var(--dash);margin:10px 0}
+.row{display:flex;justify-content:space-between;gap:10px;padding:4px 0;font-size:14px}
+.row b{font-weight:400;color:var(--green);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bye{text-align:center;color:var(--sub);font-size:13px}
+.frog{display:block;margin:6px auto 0;height:74px;width:auto}
+.bc{display:flex;justify-content:center;gap:2px;height:30px;margin-top:8px}
+.bc i{display:block;background:var(--ink)}
+</style>
+</head>
+<body>
+<div class="r">
+  <div class="m" id="m">NOV</div>
+  <div class="s">이번 달 목표</div>
+  <div class="hr"></div>
+  <div id="list"></div>
+  <div class="hr"></div>
+  <div class="bye" id="bye">오늘도 수고했어</div>
+  <img class="frog" id="frog" src="frogs/sleepy.png" alt="잠옷 개구리">
+  <div class="bc" id="bc" aria-hidden="true"></div>
+</div>
+<script>
+// 주소 뒤에 ?goals=지원서 제출:2/5,릴스 업로드:1/8 처럼 붙이면 목표가 바뀌어요
+var q=new URLSearchParams(location.search);
+var raw=q.get('goals')||'지원서 제출:2/5,릴스 업로드:1/8,블로그 글:1/4,단어장:60%';
+var months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+document.getElementById('m').textContent=months[new Date().getMonth()];
+if(q.get('msg'))document.getElementById('bye').textContent=q.get('msg');
+if(q.get('frog'))document.getElementById('frog').src='frogs/'+q.get('frog')+'.png';
+var list=document.getElementById('list');
+raw.split(',').forEach(function(g){
+  var i=g.lastIndexOf(':');var name=i>0?g.slice(0,i):g;var val=i>0?g.slice(i+1):'';
+  var row=document.createElement('div');row.className='row';
+  var a=document.createElement('span');a.textContent=name.trim();
+  var b=document.createElement('b');b.textContent=val.trim();
+  row.appendChild(a);row.appendChild(b);list.appendChild(row);
+});
+var w=[2,1,3,1,1,2,1,3,2,1,1,2,3,1,2,1,1,3,1,2,1,2,1,3,1,2];
+var bc=document.getElementById('bc');
+w.forEach(function(x){var e=document.createElement('i');e.style.width=x+'px';bc.appendChild(e);});
+</script>
+</body>
+</html>
