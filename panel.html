@@ -18,9 +18,13 @@ iframe{flex:1 1 0;min-height:0;width:100%;border:0;border-radius:6px;display:blo
 // 주소 뒤에 ?w=clock.html&w=progress.html 처럼 위젯을 여러 개 붙이면 위아래로 나눠서 보여줘요
 var q=new URLSearchParams(location.search);
 var list=q.getAll('w');if(!list.length)list=['clock.html','progress.html'];
-list.forEach(function(src){
+// &f=1,2 처럼 쓰면 칸 높이 비율을 정할 수 있어요
+var fl=(q.get('f')||'').split(',').map(Number);
+list.forEach(function(src,n){
   if(!/^[a-z]+\.html(\?.*)?$/.test(src))return;
   var f=document.createElement('iframe');f.src=src;f.title=src.split('.')[0];f.loading='eager';
+  if(fl[n]>0)f.style.flex=fl[n]+' 1 0';
+  f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');f.setAttribute('allowfullscreen','');
   document.body.appendChild(f);
 });
 </script>
