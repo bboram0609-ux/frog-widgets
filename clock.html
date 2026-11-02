@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개구리 시계</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
+<style>
+:root{--bg:#F6F8F3;--ink:#37352F;--sub:#66705F;--green:#2F6B45;--line:#DCE4D5;--mono:'Jua',system-ui,sans-serif;--sans:'Jua',system-ui,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1F2420;--ink:#ECEFE8;--sub:#A9B3A2;--green:#8CC9A0;--line:#38423A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1F2420;--ink:#ECEFE8;--sub:#A9B3A2;--green:#8CC9A0;--line:#38423A;color-scheme:dark}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 16px;box-sizing:border-box;overflow:hidden}
+img{height:min(78vh,150px);width:auto;max-width:42vw;object-fit:contain;flex:none}
+.t{font-family:var(--mono);font-weight:400;font-size:clamp(34px,13vw,64px);line-height:1;color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:0}
+.d{font-size:clamp(12px,3.6vw,15px);color:var(--sub);margin-top:8px}
+.g{display:inline-block;margin-top:10px;font-size:clamp(12px,3.4vw,14px);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+@media (max-width:260px){body{flex-direction:column;gap:6px;text-align:center}img{height:38vh;max-width:none}}
+</style>
+</head>
+<body>
+<img id="frog" src="frogs/clover_frog.png" alt="개구리">
+<div>
+  <div class="t" id="time">--:--</div>
+  <div class="d" id="date"></div>
+  <div class="g" id="greet"></div>
+</div>
+<script>
+var slots=[
+  {from:5,to:11,img:'clover_frog',msg:'좋은 아침이야'},
+  {from:11,to:14,img:'ramen',msg:'점심 맛있게 먹어'},
+  {from:14,to:18,img:'hp_tear',msg:'오후도 힘내자'},
+  {from:18,to:22,img:'dj',msg:'오늘도 수고했어'},
+  {from:22,to:29,img:'sleepy',msg:'이제 푹 자자'}
+];
+var days=['일','월','화','수','목','금','토'];
+function tick(){
+  var n=new Date(),h=n.getHours(),m=n.getMinutes();
+  document.getElementById('time').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+  document.getElementById('date').textContent=(n.getMonth()+1)+'월 '+n.getDate()+'일 '+days[n.getDay()]+'요일';
+  var hh=h<5?h+24:h,s=slots.find(function(x){return hh>=x.from&&hh<x.to})||slots[0];
+  var f=document.getElementById('frog'),src='frogs/'+s.img+'.png';
+  if(f.getAttribute('src')!==src)f.setAttribute('src',src);
+  document.getElementById('greet').textContent=s.msg;
+}
+tick();setInterval(tick,1000*10);
+</script>
+</body>
+</html>

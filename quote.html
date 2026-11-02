@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개구리 한마디</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
+<style>
+:root{--bg:#F6F8F3;--ink:#37352F;--sub:#66705F;--green:#2F6B45;--paper:#FFFFFF;--line:#DCE4D5;--mono:'Jua',system-ui,sans-serif;--hand:'Jua',system-ui,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1F2420;--ink:#ECEFE8;--sub:#A9B3A2;--green:#8CC9A0;--paper:#2A312B;--line:#38423A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1F2420;--ink:#ECEFE8;--sub:#A9B3A2;--green:#8CC9A0;--paper:#2A312B;--line:#38423A;color-scheme:dark}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--hand);display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 16px;box-sizing:border-box;overflow:hidden}
+button.frog{flex:none;border:0;background:none;padding:0;cursor:pointer;border-radius:12px}
+button.frog:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+button.frog img{display:block;height:min(70vh,120px);width:auto;max-width:34vw;object-fit:contain}
+.bubble{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px 16px;max-width:260px;min-width:0}
+.bubble::before{content:"";position:absolute;left:-7px;top:50%;width:12px;height:12px;background:var(--paper);border-left:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateY(-50%) rotate(45deg)}
+.lab{font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0}
+.msg{font-size:clamp(14px,4.6vw,17px);line-height:1.5;margin-top:4px;text-wrap:balance}
+@media (max-width:260px){body{flex-direction:column}.bubble::before{display:none}}
+</style>
+</head>
+<body>
+<button type="button" class="frog" id="next" aria-label="다른 한마디 보기"><img id="frog" src="frogs/clover_frog.png" alt=""></button>
+<div class="bubble">
+  <div class="lab">오늘의 한마디</div>
+  <div class="msg" id="msg"></div>
+</div>
+<script>
+var list=[
+  ['작게 시작해도 괜찮아. 시작한 게 중요해','clover_frog'],
+  ['오늘 할 일 하나만 끝내도 충분해','hp_star'],
+  ['물 한 잔 마시고 가자','melon'],
+  ['잘하고 있어. 진짜로','angel'],
+  ['어제보다 1%만 나아지면 돼','baseball'],
+  ['쉬는 것도 계획의 일부야','sleepy'],
+  ['좋아하는 노래 틀고 시작하자','dj'],
+  ['힘들면 울어도 돼. 그리고 또 하면 돼','cry'],
+  ['맛있는 거 먹고 힘내자','ramen'],
+  ['오늘의 나에게 박수','rockstar'],
+  ['천천히 가도 결국 도착해','lilypad'],
+  ['한 번에 하나씩','hp_calm'],
+  ['준비한 만큼 보일 거야','guitarcase'],
+  ['더우면 쉬어 가자. 부채질 해줄게','fan']
+];
+var start=new Date(),idx=Math.floor((new Date(start.getFullYear(),start.getMonth(),start.getDate())-new Date(2026,0,1))/86400000);
+idx=((idx%list.length)+list.length)%list.length;
+function show(){document.getElementById('msg').textContent=list[idx][0];document.getElementById('frog').src='frogs/'+list[idx][1]+'.png';}
+document.getElementById('next').onclick=function(){idx=(idx+1)%list.length;show();};
+show();
+</script>
+</body>
+</html>

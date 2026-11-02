@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개구리 위젯 모음</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
+<style>
+body{margin:0}
+/* 레이아웃: 노션 칼럼 폭 그대로 위젯을 늘어놓은 진열대 + 아래 설치 안내 */
+:root{--bg:#FFFFFF;--panel:#F6F8F3;--ink:#37352F;--sub:#66705F;--green:#2F6B45;--line:#E3E8DE;--mono:'Jua',system-ui,sans-serif;--sans:'Jua',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#191C1A;--panel:#1F2420;--ink:#ECEFE8;--sub:#A9B3A2;--green:#8CC9A0;--line:#333B34;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#191C1A;--panel:#1F2420;--ink:#ECEFE8;--sub:#A9B3A2;--green:#8CC9A0;--line:#333B34;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans)}
+.wrap{max-width:1100px;margin:0 auto;padding-block:36px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{display:flex;align-items:flex-end;gap:14px;margin-bottom:28px;flex-wrap:wrap}
+header img{width:84px;height:92px;object-fit:contain}
+h1{font-size:30px;margin:0;text-wrap:balance}
+header p{margin:6px 0 0;color:var(--sub);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:22px}
+.item{display:flex;flex-direction:column;gap:8px;min-width:0}
+.name{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.name b{font-size:15px}
+.name code{font-family:var(--mono);font-size:12px;color:var(--sub)}
+iframe{width:100%;border:1px solid var(--line);border-radius:6px;background:var(--panel);display:block}
+.desc{font-size:13px;color:var(--sub);line-height:1.6;margin:0}
+section.how{margin-top:44px;border-top:1px solid var(--line);padding-top:26px;max-width:720px}
+h2{font-size:19px;margin:0 0 12px}
+ol{padding-left:20px;margin:0;line-height:1.8;font-size:14px}
+.pre{font-family:var(--mono);font-size:12px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 12px;overflow-x:auto;white-space:nowrap;margin:8px 0}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="frogs/hp_star.png" alt="헤드폰 쓴 개구리">
+    <div>
+      <h1>개구리 위젯 모음</h1>
+      <p>라미의 노션 대시보드용 · 전부 실제로 움직여요. 눌러 보세요.</p>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div class="item">
+      <div class="name"><b>시계</b><code>clock.html</code></div>
+      <iframe src="clock.html" height="170" title="개구리 시계"></iframe>
+      <p class="desc">시간대마다 개구리가 바뀌어요. 아침엔 클로버, 점심엔 라멘, 오후엔 공부, 저녁엔 DJ, 밤엔 잠옷 개구리.</p>
+    </div>
+    <div class="item">
+      <div class="name"><b>진행률</b><code>progress.html</code></div>
+      <iframe src="progress.html" height="170" title="개구리 진행률"></iframe>
+      <p class="desc">올해·이번 달·이번 주·오늘이 얼마나 지났는지 레퍼런스 사진처럼 막대로 보여줘요.</p>
+    </div>
+    <div class="item">
+      <div class="name"><b>D-day</b><code>dday.html</code></div>
+      <iframe src="dday.html" height="180" title="포트폴리오 마감 디데이"></iframe>
+      <p class="desc">평소엔 커피 마시는 개구리, 3일 남으면 부채질 개구리, 당일엔 기타 치는 개구리, 지나면 날개 개구리로 바뀌어요.</p>
+    </div>
+    <div class="item">
+      <div class="name"><b>D-day (다른 설정)</b><code>dday.html?…</code></div>
+      <iframe src="dday.html?title=2026%EB%85%84%20%EB%A7%88%EB%AC%B4%EB%A6%AC&amp;date=2026-12-31&amp;frog=angel" height="180" title="2026년 마무리 디데이"></iframe>
+      <p class="desc">주소 뒤에 이름·날짜·개구리를 붙이면 D-day를 몇 개든 만들 수 있어요.</p>
+    </div>
+    <div class="item">
+      <div class="name"><b>뽀모도로 타이머</b><code>pomodoro.html</code></div>
+      <iframe src="pomodoro.html" height="190" title="개구리 뽀모도로"></iframe>
+      <p class="desc">집중 25분 동안은 음악 듣는 개구리, 쉬는 5분엔 수박 개구리. 한 번 끝내면 기타 개구리가 축하해 줘요.</p>
+    </div>
+    <div class="item">
+      <div class="name"><b>오늘의 한마디</b><code>quote.html</code></div>
+      <iframe src="quote.html" height="170" title="개구리 한마디"></iframe>
+      <p class="desc">날마다 다른 말과 개구리가 나와요. 개구리를 누르면 다음 말로 넘어가요.</p>
+    </div>
+  </div>
+
+  <section class="how">
+    <h2>노션에 넣는 주소</h2>
+    <p class="desc">노션에서 <b>/임베드</b>를 입력하고 아래 주소를 붙여 넣으세요.</p>
+    <div class="pre">https://bboram0609-ux.github.io/frog-widgets/clock.html</div>
+    <div class="pre">https://bboram0609-ux.github.io/frog-widgets/progress.html</div>
+    <div class="pre">https://bboram0609-ux.github.io/frog-widgets/dday.html</div>
+    <div class="pre">https://bboram0609-ux.github.io/frog-widgets/dday.html?title=2026년 마무리&amp;date=2026-12-31&amp;frog=angel</div>
+    <div class="pre">https://bboram0609-ux.github.io/frog-widgets/pomodoro.html</div>
+    <div class="pre">https://bboram0609-ux.github.io/frog-widgets/quote.html</div>
+    <p class="desc">D-day는 주소 뒤의 title(이름), date(날짜), frog(개구리)만 바꾸면 몇 개든 만들 수 있어요.</p>
+    <p class="desc">개구리 이름: hp_tear(커피), baseball, angel, lilypad, clover_frog, melon, ramen, dj, sleepy, hp_star, hp_calm, rockstar, guitarcase, fan, cry, sad, shock</p>
+  </section>
+</div>
+
+</body>
+</html>

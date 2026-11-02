@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개구리 디데이</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
+<style>
+:root{--bg:#F6F8F3;--ink:#37352F;--sub:#66705F;--green:#2F6B45;--line:#DCE4D5;--mono:'Jua',system-ui,sans-serif;--sans:'Jua',system-ui,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1F2420;--ink:#ECEFE8;--sub:#A9B3A2;--green:#8CC9A0;--line:#38423A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1F2420;--ink:#ECEFE8;--sub:#A9B3A2;--green:#8CC9A0;--line:#38423A;color-scheme:dark}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);display:flex;align-items:center;justify-content:center;gap:16px;padding:10px 16px;box-sizing:border-box;overflow:hidden}
+img{height:min(80vh,140px);width:auto;max-width:40vw;object-fit:contain;flex:none}
+.txt{min-width:0}
+.title{font-weight:400;font-size:clamp(14px,4.6vw,18px);color:var(--green);text-wrap:balance}
+.n{font-family:var(--mono);font-weight:400;font-size:clamp(28px,11vw,48px);line-height:1.1;font-variant-numeric:tabular-nums;margin-top:2px}
+.date{font-size:12px;color:var(--sub);margin-top:4px}
+@media (max-width:280px){body{flex-direction:column;gap:4px;text-align:center}img{height:min(40vh,100px);max-width:80vw}}
+</style>
+</head>
+<body>
+<img id="frog" src="frogs/hp_tear.png" alt="개구리">
+<div class="txt">
+  <div class="title" id="title"></div>
+  <div class="n" id="n"></div>
+  <div class="date" id="date"></div>
+</div>
+<script>
+// 주소 뒤에 ?title=이름&date=2026-12-25&frog=angel 처럼 붙이면 바뀌어요
+var q=new URLSearchParams(location.search);
+var title=q.get('title')||'포트폴리오 마감';
+var dateStr=q.get('date')||'2026-11-14';
+var frog=q.get('frog')||'hp_tear';
+var p=dateStr.split('-').map(Number);
+function render(){
+  var today=new Date();today.setHours(0,0,0,0);
+  var target=new Date(p[0],p[1]-1,p[2]);
+  var diff=Math.round((target-today)/86400000);
+  var label=diff>0?'D-'+diff:diff===0?'D-DAY':'D+'+(-diff);
+  document.getElementById('title').textContent=title;
+  document.getElementById('n').textContent=label;
+  var days=['일','월','화','수','목','금','토'];
+  document.getElementById('date').textContent=p[0]+'년 '+p[1]+'월 '+p[2]+'일 ('+days[target.getDay()]+')';
+  var img=diff===0?'rockstar':diff<0?'angel':(diff<=3?'fan':frog);
+  document.getElementById('frog').src='frogs/'+img+'.png';
+}
+render();setInterval(render,60000);
+</script>
+</body>
+</html>
