@@ -15,3 +15,4 @@
 
 - 개구리 라디오: music.html (?yt=유튜브주소 로 내 음악 추가)
 - 개구리 라디오(소리만): radio.html — SomaFM 인터넷 라디오
+- 통큰런 5K D-day + 훈련 도장: run.html

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개구리 러닝 D-day</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
+<style>
+:root{--bg:#F6F8F3;--ink:#37352F;--sub:#66705F;--green:#2F6B45;--line:#DCE4D5;--stamp:#2F6B45;--today:#F2C76B;--paper:#FFFFFF;--font:'Jua',system-ui,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1F2420;--ink:#ECEFE8;--sub:#A9B3A2;--green:#8CC9A0;--line:#38423A;--stamp:#8CC9A0;--paper:#2A312B;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1F2420;--ink:#ECEFE8;--sub:#A9B3A2;--green:#8CC9A0;--line:#38423A;--stamp:#8CC9A0;--paper:#2A312B;color-scheme:dark}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);padding:8px 12px;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.top{display:flex;align-items:center;gap:10px}
+.top img{height:min(30vh,84px);width:auto;flex:none}
+.t{font-size:clamp(13px,5.4vw,17px);color:var(--green)}
+.n{font-size:clamp(26px,12vw,42px);line-height:1.05}
+.w{font-size:11px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lab{font-size:11px;color:var(--sub);display:flex;justify-content:space-between}
+.st{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+button{aspect-ratio:1;min-width:0;border:1.5px dashed var(--line);border-radius:50%;background:var(--paper);color:var(--sub);font-family:var(--font);font-size:clamp(9px,3.6vw,12px);padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+button.today{border:2px solid var(--today)}
+button.on{border:2px solid var(--stamp);background:var(--stamp);color:var(--bg)}
+button.on img{position:absolute;inset:8%;width:84%;height:84%;object-fit:contain}
+button.race{border-style:solid;border-color:var(--green);color:var(--green)}
+button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.msg{font-size:12px;text-align:center;color:var(--green);min-height:1em}
+</style>
+</head>
+<body>
+<div class="top">
+  <img id="frog" src="frogs/baseball.png" alt="">
+  <div style="min-width:0">
+    <div class="t">통큰런 5K</div>
+    <div class="n" id="n">D-12</div>
+    <div class="w">11월 14일(토) 오전 8시 · 상암 평화광장</div>
+  </div>
+</div>
+<div>
+  <div class="lab"><span>훈련 도장</span><span id="cnt">0 / 6</span></div>
+  <div class="st" id="st"></div>
+</div>
+<div class="msg" id="msg"></div>
+<script>
+// 훈련한 날 동그라미를 누르면 개구리 도장이 찍혀요 (이 기기에만 저장돼요)
+var race=new Date(2026,10,14);
+var days=[[3,'화'],[5,'목'],[7,'토'],[8,'일'],[10,'화'],[12,'목'],[14,'대회']];
+var KEY='frog-run-tongkeun';var done={};try{done=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){}
+var cheer=['좋아, 첫 도장!','두 번째! 몸이 기억해','벌써 절반!','네 번째, 멋져','거의 다 왔어','훈련 끝! 이제 푹 쉬자','완주 축하해!'];
+var $=function(x){return document.getElementById(x)};
+function render(){
+  var t=new Date();t.setHours(0,0,0,0);var d=Math.round((race-t)/86400000);
+  $('n').textContent=d>0?'D-'+d:d===0?'D-DAY':'완주!';
+  var box=$('st');box.innerHTML='';var c=0;
+  days.forEach(function(x){
+    var b=document.createElement('button');b.type='button';var k='11-'+x[0];var on=!!done[k];
+    var isRace=x[1]==='대회';if(on&&!isRace)c++;
+    b.className=(on?'on ':'')+(isRace?'race ':'')+(t.getMonth()===10&&t.getDate()===x[0]?'today':'');
+    b.setAttribute('aria-label','11월 '+x[0]+'일 '+(on?'도장 찍음':'도장 찍기'));
+    if(on){var im=document.createElement('img');im.alt='';im.src='frogs/'+(isRace?'rockstar':'clover_frog')+'.png';b.appendChild(im);}
+    else b.textContent=isRace?'14':x[0];
+    b.onclick=function(){if(done[k])delete done[k];else done[k]=1;try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}
+      var n=Object.keys(done).filter(function(z){return z!=='11-14'}).length;$('msg').textContent=done[k]?(k==='11-14'?cheer[6]:cheer[Math.max(0,n-1)]):'';render();};
+    box.appendChild(b);
+  });
+  $('cnt').textContent=c+' / 6';
+  $('frog').src='frogs/'+(done['11-14']?'rockstar':d<=1?'sleepy':c>=4?'angel':c>=1?'clover_frog':'baseball')+'.png';
+}
+render();setInterval(render,60000);
+</script>
+</body>
+</html>
